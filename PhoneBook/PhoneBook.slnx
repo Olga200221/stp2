@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PhoneBook/PhoneBook.csproj" />
+  <Project Path="UnitTestProject1/UnitTestProject1.csproj" />
+</Solution>
