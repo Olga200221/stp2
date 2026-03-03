@@ -28,6 +28,7 @@
 		private void InitializeComponent() {
 			this.mS_Main = new System.Windows.Forms.MenuStrip();
 			this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.историяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabPage_Frac = new System.Windows.Forms.TabPage();
 			this.panel_Frac_MStatus = new System.Windows.Forms.Panel();
@@ -137,7 +138,6 @@
 			this.b_PNumber_2 = new System.Windows.Forms.Button();
 			this.b_PNumber_1 = new System.Windows.Forms.Button();
 			this.b_PNumber_MC = new System.Windows.Forms.Button();
-			this.историяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mS_Main.SuspendLayout();
 			this.tabControl.SuspendLayout();
 			this.tabPage_Frac.SuspendLayout();
@@ -169,6 +169,12 @@
 			this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			this.справкаToolStripMenuItem.Text = "Справка";
 			this.справкаToolStripMenuItem.Click += new System.EventHandler(this.СправкаToolStripMenuItem_Click);
+			// 
+			// историяToolStripMenuItem
+			// 
+			this.историяToolStripMenuItem.Name = "историяToolStripMenuItem";
+			this.историяToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+			this.историяToolStripMenuItem.Text = "История";
 			// 
 			// tabControl
 			// 
@@ -222,6 +228,7 @@
 			this.tabPage_Frac.Size = new System.Drawing.Size(399, 372);
 			this.tabPage_Frac.TabIndex = 1;
 			this.tabPage_Frac.Text = "Дробные числа";
+			this.tabPage_Frac.Click += new System.EventHandler(this.tabPage_Frac_Click);
 			// 
 			// panel_Frac_MStatus
 			// 
@@ -1113,6 +1120,7 @@
 			this.tabPage_PNumber.Size = new System.Drawing.Size(399, 372);
 			this.tabPage_PNumber.TabIndex = 0;
 			this.tabPage_PNumber.Text = "P-ичные числа";
+			//this.tabPage_PNumber.Click += new System.EventHandler(this.tabPage_PNumber_Click);
 			// 
 			// panel1
 			// 
@@ -1579,12 +1587,6 @@
 			this.b_PNumber_MC.Text = "MC";
 			this.b_PNumber_MC.UseVisualStyleBackColor = true;
 			this.b_PNumber_MC.Click += new System.EventHandler(this.Button_Memory);
-			// 
-			// историяToolStripMenuItem
-			// 
-			this.историяToolStripMenuItem.Name = "историяToolStripMenuItem";
-			this.историяToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
-			this.историяToolStripMenuItem.Text = "История";
 			// 
 			// Form1
 			// 

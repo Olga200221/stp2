@@ -85,9 +85,9 @@ namespace Calculator {
                 throw new OverflowException();
             return toReturn;
         }
-        public static TComplex operator *(TComplex a, TComplex b) {
-            TComplex toReturn = new TComplex(a.Real * b.Real - a.Imaginary - b.Imaginary, a.Real * b.Imaginary + b.Imaginary * a.Real);
-            if (toReturn.Real.ToString().Length > OverflowStringLimit)
+		public static TComplex operator *(TComplex a, TComplex b){
+			TComplex toReturn = new TComplex(a.Real * b.Real - a.Imaginary * b.Imaginary, a.Real * b.Imaginary + a.Imaginary * b.Real);
+			if (toReturn.Real.ToString().Length > OverflowStringLimit)
                 throw new OverflowException();
             else if (toReturn.Imaginary.ToString().Length > OverflowStringLimit)
                 throw new OverflowException();

@@ -10,13 +10,17 @@ namespace Calculator
 		TCtrl<TFrac, FracEditor> fracController;
 		TCtrl<TPNumber, PNumberEditor> pNumberController;
 		TCtrl<TComplex, ComplexEditor> complexController;
+
 		const string TAG_FRAC = "FRAC_";
 		const string TAG_COMPLEX = "COMPLEX_";
 		const string TAG_PNUMBER = "PNUMBER_";
+
 		const string OPERATIONS = "+-/*";
+
 		bool PNumberMode = true;
 		bool FracMode = true;
 		bool ComplexMode = true;
+
 		enum ComplexFunctions
 		{
 			Pwr, Root, Abs, Dgr, Rad
@@ -32,6 +36,7 @@ namespace Calculator
 		{
 			if (str == "ERROR")
 				return str;
+
 			string ToReturn = str;
 			switch (Tag)
 			{
@@ -110,7 +115,9 @@ namespace Calculator
 			fracController = new TCtrl<TFrac, FracEditor>();
 			pNumberController = new TCtrl<TPNumber, PNumberEditor>();
 			complexController = new TCtrl<TComplex, ComplexEditor>();
+
 			InitializeComponent();
+
 			Size = new System.Drawing.Size(310, 382);
 
 			// ====== подключаем обработчик кнопки истории ======
@@ -126,12 +133,44 @@ namespace Calculator
 			числоFracTSMI.Click += числоFracTSMI_Click;
 			комплексноеComplexTSMI.Click += комплексноеComplexTSMI_Click;
 			действительноеComplexTSMI.Click += действительноеComplexTSMI_Click;
+
+			// ← Инициализация доступности кнопок при запуске
+			UpdatePNumberDigitButtons();
+		}
+
+		// Новый метод — управление доступностью кнопок 0–9, A–F
+		private void UpdatePNumberDigitButtons()
+		{
+			int currentBase = trackBar_PNumber.Value;
+
+			// Цифры 0–7 всегда доступны (для оснований ≥2)
+			b_PNumber_0.Enabled = true;
+			b_PNumber_1.Enabled = true;
+			b_PNumber_2.Enabled = true;
+			b_PNumber_3.Enabled = true;
+			b_PNumber_4.Enabled = true;
+			b_PNumber_5.Enabled = true;
+			b_PNumber_6.Enabled = true;
+			b_PNumber_7.Enabled = true;
+
+			// 8 и 9 — только если основание > 8 и > 9
+			b_PNumber_8.Enabled = currentBase > 8;
+			b_PNumber_9.Enabled = currentBase > 9;
+
+			// Шестнадцатеричные буквы A–F
+			b_PNumber_A.Enabled = currentBase > 10;
+			b_PNumber_B.Enabled = currentBase > 11;
+			b_PNumber_C.Enabled = currentBase > 12;
+			b_PNumber_D.Enabled = currentBase > 13;
+			b_PNumber_E.Enabled = currentBase > 14;
+			b_PNumber_F.Enabled = currentBase > 15;
 		}
 
 		private void Button_Number_Edit(object sender, EventArgs e)
 		{
 			Button button = (Button)sender;
 			string FullTag = button.Tag.ToString();
+
 			if (FullTag.StartsWith(TAG_FRAC))
 			{
 				Enum.TryParse(FullTag.Replace(TAG_FRAC, string.Empty), out AEditor.Command ParsedEnum);
@@ -154,6 +193,7 @@ namespace Calculator
 		{
 			Button button = (Button)sender;
 			string FullTag = button.Tag.ToString();
+
 			if (FullTag.StartsWith(TAG_FRAC))
 			{
 				string Command = FullTag.Replace(TAG_FRAC, string.Empty);
@@ -178,6 +218,7 @@ namespace Calculator
 		{
 			Button button = (Button)sender;
 			string FullTag = button.Tag.ToString();
+
 			if (FullTag.StartsWith(TAG_FRAC))
 			{
 				string Command = FullTag.Replace(TAG_FRAC, string.Empty);
@@ -202,6 +243,7 @@ namespace Calculator
 		{
 			Button button = (Button)sender;
 			string FullTag = button.Tag.ToString();
+
 			if (FullTag.StartsWith(TAG_FRAC))
 			{
 				tB_Frac.Text = fracController.Reset();
@@ -242,10 +284,8 @@ namespace Calculator
 			{
 				string result = pNumberController.Calculate();
 				tB_PNumber.Text = result;
-
 				// TPNumber через конструктор string + разрядность + точность
 				TPNumber tpNum = new TPNumber(result, trackBar_PNumber.Value, 5);
-
 				pNumberHistory.Add(new TMemory<TPNumber>(tpNum));
 			}
 		}
@@ -254,6 +294,7 @@ namespace Calculator
 		{
 			Button button = (Button)sender;
 			string FullTag = button.Tag.ToString();
+
 			if (FullTag.StartsWith(TAG_FRAC))
 			{
 				string Command = FullTag.Replace(TAG_FRAC, string.Empty);
@@ -289,7 +330,6 @@ namespace Calculator
 			Form historyForm = new Form();
 			historyForm.Text = "История вычислений";
 			historyForm.Size = new System.Drawing.Size(400, 300);
-
 			DataGridView dgv = new DataGridView();
 			dgv.Dock = DockStyle.Fill;
 			dgv.ColumnCount = 2;
@@ -298,10 +338,8 @@ namespace Calculator
 
 			foreach (var mem in fracHistory)
 				dgv.Rows.Add("Дробь", mem.FNumber.ToString());
-
 			foreach (var mem in complexHistory)
 				dgv.Rows.Add("Комплекс", mem.FNumber.ToString());
-
 			foreach (var mem in pNumberHistory)
 				dgv.Rows.Add("P-число", mem.FNumber.ToString());
 
@@ -323,6 +361,12 @@ namespace Calculator
 				case 1: Size = new System.Drawing.Size(355, 382); break;
 				case 2: Size = new System.Drawing.Size(355, 433); break;
 			}
+
+			// ← Обновляем кнопки, когда переключаемся на вкладку p-ичных чисел
+			if (tabControl.SelectedIndex == 2) // предполагаем, что вкладка P-чисел — индекс 2
+			{
+				UpdatePNumberDigitButtons();
+			}
 		}
 
 		private void TrackBar_PNumber_ValueChanged(object sender, EventArgs e)
@@ -331,6 +375,9 @@ namespace Calculator
 			pNumberController.Edit.Notation = new TNumber(trackBar_PNumber.Value);
 			tB_PNumber.Text = pNumberController.Reset();
 			label_PNumber_Memory.Text = string.Empty;
+
+			// ← Самое важное место: обновляем доступность кнопок при смене основания
+			UpdatePNumberDigitButtons();
 		}
 
 		private void Form1_KeyPress(object sender, KeyPressEventArgs e)
@@ -377,6 +424,10 @@ namespace Calculator
 			комплексноеComplexTSMI.Checked = false;
 			действительноеComplexTSMI.Checked = true;
 			ComplexMode = false;
+		}
+
+		private void tabPage_Frac_Click(object sender, EventArgs e)
+		{
 		}
 	}
 }
